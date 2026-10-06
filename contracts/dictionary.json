@@ -1,0 +1,18 @@
+{
+  "schema": "dictionary/1",
+  "role": "REPOSITORY_DESIGN_DEFINITIONS_NOT_USER_BELIEFS",
+  "entries": [
+    {"term": "zookeeper", "meaning": "The control layer that routes bounded work to registered workers, retains state and exposes outcomes."},
+    {"term": "onion", "meaning": "A layered representation of utterance, tokens, intent, sources, computation, policy and receipts."},
+    {"term": "taxi", "meaning": "On-demand routing from a human request to the relevant case context and supported operation."},
+    {"term": "work capsule", "meaning": "A versioned case-scoped snapshot of source identities, indexes, topology, tasks, worker/provider roles and lens projections."},
+    {"term": "work folder", "meaning": "A reproducible file projection of a capsule; not a second authoritative database."},
+    {"term": "worker agent", "meaning": "A bounded execution role; the Go worker is a stateless process, not a model or autonomous persona."},
+    {"term": "provider agent", "meaning": "An adapter role exposing measured tools and limits of a provider; this build has local Python and Go providers."},
+    {"term": "engineering lens", "meaning": "A projection of implemented architecture, state/effect constraints and worker boundaries."},
+    {"term": "QA lens", "meaning": "A projection of actual receipt checks and source-bound test outcomes; not an independent semantic reviewer."},
+    {"term": "semantic index", "meaning": "Source-bound lexical postings plus explicitly defined meanings; model embeddings and calibrated semantic confidence are absent."},
+    {"term": "frame", "meaning": "The supported operation selected for a request: context, exact money addition, or explicit-reference topology."},
+    {"term": "zone", "meaning": "A responsibility boundary: ingestion, language/math/topology computation, durable control, or human review."}
+  ]
+}

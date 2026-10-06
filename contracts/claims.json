@@ -1,0 +1,21 @@
+{
+  "schema": "claims/1",
+  "author": "Arif Anil Dondurmaci",
+  "implementation_assistance": "AI-assisted; owner-guided problem framing and review",
+  "claims": [
+    {"id": "C1", "status": "IMPLEMENTED", "claim": "Durable local context-to-artifact workflow with explicit approval", "code": ["runtime.py", "app.py"], "test": "test_end_to_end_source_bound_artifact", "scope": "Synthetic fixtures; one database"},
+    {"id": "C2", "status": "IMPLEMENTED", "claim": "Recovery across OS-process termination before and after transaction commit", "code": ["runtime.py"], "tests": ["test_process_kill_before_commit_rolls_back", "test_process_kill_after_commit_replays_without_duplicate"], "scope": "Process termination, not power failure"},
+    {"id": "C3", "status": "IMPLEMENTED", "claim": "Replay and six concurrent workers produce one local artifact", "tests": ["test_duplicate_request_conflict_and_replay", "test_concurrent_workers_commit_one_artifact"], "scope": "Same-host SQLite connections; no distributed effect claim"},
+    {"id": "C4", "status": "IMPLEMENTED", "claim": "Source changes revoke approval applicability", "test": "test_source_change_invalidates_old_approval", "scope": "Full fixture corpus hashing"},
+    {"id": "C5", "status": "IMPLEMENTED", "claim": "English HMI and JSON projections share persisted workflow state", "code": ["web/index.html", "web/ui.js", "app.py"], "test": "test_http_origin_token_boundary_and_ui_action", "scope": "Local-session boundary; no verified human identity"},
+    {"id": "C6", "status": "IMPLEMENTED", "claim": "UTF-8 source text survives prepare, commit and restart without normalization", "test": "test_utf8_unicode_roundtrip_without_normalization"},
+    {"id": "C7", "status": "UNKNOWN", "claim": "Real model task success and semantic retrieval quality", "evidence": null},
+    {"id": "C8", "status": "UNKNOWN", "claim": "External-user usability, adoption and production-scale reliability", "evidence": null},
+    {"id": "C9", "status": "IMPLEMENTED", "claim": "Stateless Go worker for language, CPU ranking, exact money sums and explicit graph routes", "code": ["workers.py", "cmd/worker/main.go"], "tests": ["test_real_go_math_frame_and_decimal_precision", "test_real_go_topology_frame_from_explicit_links", "test_stateless_worker_has_no_cross_call_context"]},
+    {"id": "C10", "status": "IMPLEMENTED", "claim": "Case-scoped local/cloud hydration and exact-spelling dictionary", "tests": ["test_local_feed_then_hydration", "test_cloud_spider_then_case_hydration", "test_case_isolation_and_source_spelling", "test_scoped_dictionary_routes_and_revision_revokes_approval"]},
+    {"id": "C11", "status": "IMPLEMENTED", "claim": "CPU ranking feedback scoped to case, query and captured source bytes", "test": "test_cpu_reranker_feedback_is_case_query_and_source_scoped"},
+    {"id": "C12", "status": "IMPLEMENTED", "claim": "Work capsule with closed topology, explicit meanings, workers/providers and engineering/QA lenses", "test": "test_capsule_topology_dictionary_and_projection"}
+  ],
+  "measurement": "evidence/local-eval.json",
+  "verification_rule": "Read per-case results and exact source hashes. IMPLEMENTED is not independent acceptance; machine-readable evidence contains the measured outcomes."
+}

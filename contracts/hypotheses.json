@@ -1,0 +1,8 @@
+{
+  "schema": "hypotheses/1",
+  "hypotheses": [
+    {"id": "H1", "status": "UNTESTED", "statement": "A source-linked draft reduces operator review time without increasing wrong approvals", "experiment": "Randomized source-linked versus unlinked drafts with independent task labels", "metrics": ["review_seconds", "wrong_approval_rate"], "falsifier": "No review-time reduction or more wrong approvals", "investment": "One bounded usability study", "roi": null, "cash_conversion_time": null},
+    {"id": "H2", "status": "UNTESTED", "statement": "Retrieval caching keyed by corpus version improves median latency without stale answers", "experiment": "Compare uncached and version-keyed caching across corpus revisions", "metrics": ["p50_ms", "p95_ms", "stale_answer_count"], "falsifier": "No latency improvement or any stale answer", "investment": "One cache adapter and controlled replay experiment", "roi": null, "cash_conversion_time": null},
+    {"id": "H3", "status": "UNTESTED", "statement": "An LLM planner can improve task utility while preserving exact-payload approval", "experiment": "Add a proposal-only adapter; independently label task utility and run the same effect-boundary tests", "metrics": ["task_utility", "unauthorized_effect_count", "cost_usd"], "falsifier": "No utility improvement or any unauthorized effect", "investment": "A provider adapter plus a labeled holdout set", "roi": null, "cash_conversion_time": null}
+  ]
+}

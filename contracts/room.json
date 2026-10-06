@@ -1,0 +1,22 @@
+{
+  "schema": "new4-room/1",
+  "vision": "High fidelity context, high utility work, clear human control, lightweight on-demand operation",
+  "room": {"role": "Case-scoped shared context and work space", "implementation": "SQLite sources, tasks, definitions, feedback and receipts"},
+  "board": {"role": "One conversation surface, many workflow frames", "implementation": "Human requests and tool results projected from persisted tasks"},
+  "work": {"role": "Versioned task, proposal, approval, artifact and capsule", "implementation": "Python zookeeper plus stateless Go worker"},
+  "llm_room": {"role": "Future proposal-only model adapters share the same case capsule", "status": "DESIGNED_NOT_CONNECTED", "active_model_providers": 0},
+  "llm_quality": {"semantic_task_success": null, "calibrated_confidence": null, "independent_semantic_review": null},
+  "context_quality": {"measured_here": ["exact source hashes", "source revision detection", "Unicode roundtrip", "case isolation", "bounded lexical retrieval", "explicit reference closure"], "semantic_relevance": null, "user_utility": null},
+  "efficiency": {"background_polling": false, "worker_lifecycle": "Start, process bounded request, exit", "reranker": "CPU BM25 plus explicit case/query/source-bound feedback", "provider_cost_for_fixture_usd": 0, "total_operational_roi": null},
+  "authority": {
+    "n1_auth": "One local operator effect gate per task; not verified legal identity",
+    "0auth": "Workers, source text, topology, feedback and future model proposals cannot approve effects",
+    "ownerauth": "Explicit current-payload approval from the local session",
+    "oauth": "NOT_IMPLEMENTED; 0auth is not an OAuth authentication claim"
+  },
+  "realmdoor": {"role": "One loopback API gateway for this package", "status": "IMPLEMENTED_LOCAL", "not_claimed": "Universal desktop or cross-machine gate"},
+  "ikea_scan": {"role": "Observe registered local capabilities and request outcomes", "status": "IMPLEMENTED_ON_DEMAND"},
+  "micro_os": {"role": "Application-level process/state/tool coordination metaphor", "status": "NOT_A_BOOTABLE_OS_OR_KERNEL"},
+  "qos": {"worker_timeout_seconds": 3, "worker_input_bytes": 65536, "http_request_bytes": 8192, "cloud_page_bytes": 262144, "production_slo": null},
+  "status": "BASE_RUNTIME_WITH_MEASURED_BOUNDED_BEHAVIOR_NOT_UNIVERSAL_AGENT_SYSTEM"
+}

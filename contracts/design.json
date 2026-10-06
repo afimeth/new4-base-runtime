@@ -1,0 +1,33 @@
+{
+  "schema": "design/1",
+  "author": "Arif Anil Dondurmaci",
+  "encoding": "UTF-8",
+  "scope": "Local synthetic context-to-action workflow",
+  "states": ["NEW", "AWAITING_APPROVAL", "ABSTAINED", "CANCELLED", "DONE"],
+  "transitions": [
+    {"from": "NEW", "action": "prepare", "to": ["AWAITING_APPROVAL", "ABSTAINED"]},
+    {"from": ["AWAITING_APPROVAL", "ABSTAINED"], "action": "prepare", "to": ["AWAITING_APPROVAL", "ABSTAINED"], "constraint": "A changed payload revokes existing approval"},
+    {"from": "AWAITING_APPROVAL", "action": "approve", "to": "AWAITING_APPROVAL", "constraint": "Exact current payload hash; local operator declaration"},
+    {"from": "AWAITING_APPROVAL", "action": "execute", "to": "DONE", "constraint": "Current sources, policy, payload and matching approval; one SQLite transaction"},
+    {"from": ["NEW", "AWAITING_APPROVAL", "ABSTAINED"], "action": "cancel", "to": "CANCELLED"},
+    {"from": "DONE", "action": "execute", "to": "DONE", "constraint": "Verify and return existing artifact; no new event or effect"}
+  ],
+  "invariants": [
+    {"id": "I1", "statement": "An artifact exists if and only if the task is DONE", "verification": "Runtime.verify; crash tests"},
+    {"id": "I2", "statement": "At most one artifact per task", "verification": "SQLite primary key; concurrent worker test"},
+    {"id": "I3", "statement": "A new effect requires exact-payload approval", "verification": "Execute guard; denial and positive-control test"},
+    {"id": "I4", "statement": "Source revisions require a fresh draft and approval", "verification": "Corpus hash comparison; source-change test"},
+    {"id": "I5", "statement": "Source content grants no authority", "verification": "Untrusted instruction fixture cannot execute without approval"},
+    {"id": "I6", "statement": "Receipt changes are detectable against the retained chain", "verification": "Hash and sequence validation; mutation test", "limitation": "No signature or external head anchor; a privileged writer can rewrite or truncate a consistent history"}
+  ],
+  "layers": [
+    {"role": "L1", "mechanism": "Deterministic state/policy guards, SQLite transactions and verification", "cost_step": 1},
+    {"role": "L2", "mechanism": "Deterministic extractive planner; model worker absent because this is an offline fixture", "cost_step": 1},
+    {"role": "L3", "mechanism": "Mechanical local/CI tests; independent semantic reviewer absent", "cost_step": 1},
+    {"role": "L4", "mechanism": "Local operator review; cryptographic owner identity absent", "cost_step": 1}
+  ],
+  "decision": "Commit artifact, terminal state and receipt in one local transaction",
+  "tradeoff": "This supports a bounded local artifact sink, not remote effects",
+  "external_effects": false,
+  "authority_identity": "LOCAL_DECLARATION_NOT_VERIFIED_IDENTITY"
+}

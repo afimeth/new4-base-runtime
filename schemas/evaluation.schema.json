@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/context-to-action/evaluation.schema.json",
+  "title": "Source-bound fixture evaluation",
+  "type": "object",
+  "required": ["schema", "timestamp", "environment", "source_hashes", "source_commit_at_run", "scope", "planner", "model_calls", "provider_cost_usd", "semantic_accuracy", "human_usability", "independent_review", "cases", "passed", "total", "status", "process_kill", "receipt_hash"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "evaluation/1"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "environment": {"type": "object", "required": ["os", "python", "sqlite"], "additionalProperties": false, "properties": {"os": {"type": "string"}, "python": {"type": "string"}, "sqlite": {"type": "string"}}},
+    "source_commit_at_run": {"type": ["string", "null"]},
+    "source_hashes": {"type": "object", "minProperties": 8, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "scope": {"const": "SYNTHETIC_LOCAL_FIXTURES_REAL_SQLITE_REAL_SUBPROCESSES"},
+    "planner": {"const": "deterministic-extractive/1"},
+    "model_calls": {"const": 0},
+    "provider_cost_usd": {"const": 0},
+    "semantic_accuracy": {"type": "null"},
+    "human_usability": {"type": "null"},
+    "independent_review": {"type": "null"},
+    "cases": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id", "status", "elapsed_ms", "detail"], "additionalProperties": false, "properties": {"id": {"type": "string"}, "status": {"enum": ["PASS", "FAIL", "ERROR"]}, "elapsed_ms": {"type": "number", "minimum": 0}, "detail": {"type": ["string", "null"]}}}},
+    "passed": {"type": "integer", "minimum": 0},
+    "total": {"type": "integer", "minimum": 1},
+    "status": {"enum": ["PASS", "FAIL"]},
+    "process_kill": {"const": "OS_PROCESS_TERMINATION_NOT_POWER_FAILURE"},
+    "receipt_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
