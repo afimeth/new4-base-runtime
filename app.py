@@ -101,7 +101,7 @@ def serve(database, port=0):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action',choices=('demo','serve','evaluate','worker','verify','setup','feed-local','feed-cloud','feed-alexandria','capsule','define','scan'))
+    parser.add_argument('action',choices=('demo','serve','evaluate','worker','verify','setup','feed-local','feed-cloud','feed-alexandria','capsule','define','scan','context','consolidate','map-code'))
     parser.add_argument('--db',default=str(ROOT/'.state/runtime.sqlite'))
     parser.add_argument('--port',type=int,default=0)
     parser.add_argument('--id',default='release-demo')
@@ -155,6 +155,15 @@ def main():
             from capsules import export
             print(encoded(export(runtime,args.case)))
         elif args.action=='define':print(encoded(runtime.define(args.case,args.term,args.meaning)))
+        elif args.action=='context':
+            from context import assemble
+            ensure_worker();print(encoded(assemble(runtime,args.case,args.query)))
+        elif args.action=='consolidate':
+            from context import consolidate
+            print(encoded(consolidate(runtime,args.case)))
+        elif args.action=='map-code':
+            from context import code_map
+            print(encoded(code_map(args.folder)))
         else:
             def fault(point):
                 if point==args.cut:

@@ -56,6 +56,9 @@ class Runtime:
             rating INTEGER NOT NULL, recorded_at TEXT NOT NULL, PRIMARY KEY(task,source));
           CREATE TABLE IF NOT EXISTS dictionary(case_id TEXT NOT NULL, term TEXT NOT NULL,
             meaning TEXT NOT NULL,recorded_at TEXT NOT NULL, PRIMARY KEY(case_id,term));
+          CREATE TABLE IF NOT EXISTS memory(case_id TEXT NOT NULL,id TEXT NOT NULL,
+            revision INTEGER NOT NULL,source TEXT NOT NULL,source_hash TEXT NOT NULL,
+            note TEXT NOT NULL,status TEXT NOT NULL,role TEXT NOT NULL,PRIMARY KEY(case_id,id,revision));
         """)
         if 'case_id' not in {r['name'] for r in self.db.execute('PRAGMA table_info(tasks)')}:
             self.db.execute("ALTER TABLE tasks ADD COLUMN case_id TEXT NOT NULL DEFAULT 'demo'")
@@ -251,6 +254,20 @@ class Runtime:
         return {'schema':'receipt-verification/1','events':count,'head':previous,'chain':'VERIFIED_LOCAL','external_anchor':None,'identity_assurance':'LOCAL_DECLARATION','database_integrity':self.db.execute('PRAGMA integrity_check').fetchone()[0]}
 
     def view(self):
+        with self.snapshot():return self._view()
+
+    @contextmanager
+    def snapshot(self):
+        nested=self.db.in_transaction
+        if not nested:self.db.execute('BEGIN')
+        try:
+            yield
+            if not nested:self.db.execute('COMMIT')
+        except BaseException:
+            if not nested:self.db.execute('ROLLBACK')
+            raise
+
+    def _view(self):
         tasks=[dict(row) for row in self.db.execute('SELECT * FROM tasks ORDER BY id')]
         for task in tasks:
             task['payload']=json.loads(task['payload']) if task['payload'] else None
@@ -294,7 +311,7 @@ class Runtime:
         if not isinstance(case_id,str) or not re.fullmatch(r'[a-zA-Z0-9_-]{1,64}',case_id) or not isinstance(term,str) or not 1<=len(term)<=120 or not isinstance(meaning,str) or not 1<=len(meaning)<=2000:raise Rejected('INVALID_DEFINITION')
         with self.transaction():
             self.db.execute('INSERT OR REPLACE INTO dictionary VALUES(?,?,?,?)',(case_id,term,meaning,now()))
-            self.event('dictionary:'+case_id,'DEFINED',{'term':term,'meaning':meaning,'role':'LOCAL_OPERATOR_DEFINITION'})
+            self.event('dictionary:'+case_id,'DEFINED',{'case_id':case_id,'term':term,'meaning':meaning,'role':'LOCAL_OPERATOR_DEFINITION'})
         return {'status':'DEFINED_LOCAL','case_id':case_id,'term':term}
 
     def definition_version(self,case_id):

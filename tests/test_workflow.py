@@ -188,6 +188,39 @@ class WorkflowTests(unittest.TestCase):
             for _ in range(4):CAPACITY.release()
         self.assertEqual(call('onion.parse',{'text':'find notes'})['intent'],'find')
 
+    def test_view_reads_one_snapshot_during_concurrent_write(self):
+        self.rt.create('first','find release')
+        other=Runtime(self.path);original=self.rt.verify
+        def mutate_then_verify():
+            other.create('second','find meeting')
+            return original()
+        self.rt.verify=mutate_then_verify
+        try:
+            view=self.rt.view()
+            self.assertEqual([t['id'] for t in view['tasks']],['first'])
+            self.assertEqual(view['receipt']['events'],1)
+        finally:other.close();self.rt.verify=original
+        self.assertEqual(len(self.rt.view()['tasks']),2)
+
+    def test_context_prefix_budget_and_memory_supersession(self):
+        from context import assemble,consolidate
+        first=assemble(self.rt,'demo','find release policy')
+        second=assemble(self.rt,'demo','find invoice policy')
+        self.assertEqual(first['prefix_hash'],second['prefix_hash'])
+        self.assertLessEqual(len(json.dumps(first,ensure_ascii=False).encode()),16000)
+        initial=consolidate(self.rt,'demo');self.assertTrue(all(c['operation']=='ADD' for c in initial['changes']))
+        self.rt.import_document('release-policy','Release review policy','Updated release checklist')
+        updated=consolidate(self.rt,'demo');self.assertTrue(any(c['operation']=='UPDATE' for c in updated['changes']))
+        self.assertEqual(self.rt.db.execute("SELECT count(*) FROM memory WHERE status='SUPERSEDED'").fetchone()[0],1)
+        self.assertIsNone(first['provider_cache_hit_rate'])
+
+    def test_python_ast_map_does_not_execute_source(self):
+        from context import code_map
+        folder=Path(self.tmp.name)/'code';folder.mkdir()
+        (folder/'sample.py').write_text('raise RuntimeError("must not execute")\nclass Example:\n    def work(self, name: str) -> str:\n        return name\n',encoding='utf8')
+        result=code_map(folder)
+        self.assertTrue(any('def work' in s['signature'] for s in result['symbols']))
+
     def test_utf8_unicode_roundtrip_without_normalization(self):
         text='Résumé café — 東京 — مرحبا — 🧭 — e\u0301'
         docs=[{'id':'unicode-document','title':'Unicode reference','text':text}]

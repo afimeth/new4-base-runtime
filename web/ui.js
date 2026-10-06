@@ -12,7 +12,7 @@ async function refresh(){
   const r=await fetch('/api/state');const view=await r.json();if(!r.ok)throw Error(view.error);
   const c=await fetch('/api/capsule?case='+encodeURIComponent(currentCase()));const capsule=await c.json();if(!c.ok)throw Error(capsule.error);
   for(const id of ['tasks','events','sources','dictionary'])el(id).replaceChildren();
-  for(const task of view.tasks.filter(t=>t.case_id===currentCase())){
+  for(const task of capsule.tasks){
     const card=node('article','','task');card.append(node('h3',task.query),node('p',task.state,'badge'));
     if(task.payload){
       card.append(node('pre',task.payload.hold_reason||task.payload.draft||'No matching source. Add a note or refine the request.'));
@@ -32,8 +32,8 @@ async function refresh(){
   el('graph').textContent=JSON.stringify({nodes:capsule.topology.nodes.length,links:capsule.topology.edges.length,word_entries:capsule.semantic_index.length,relations:capsule.topology.edges.filter(e=>e.relation!=='CONTAINS_EXACT_WORD').map(e=>({from:labels[e.from],relation:e.relation,to:labels[e.to]})),gaps:capsule.topology.gaps},null,2);
   el('lenses').textContent=JSON.stringify({architecture:capsule.architecture,context_quality:capsule.context_quality,workers:capsule.worker_agents,providers:capsule.provider_agents,lenses:capsule.lenses},null,2);
   el('capsule-summary').textContent=`${capsule.sources.length} source${capsule.sources.length===1?'':'s'} · ${capsule.tasks.length} workflow${capsule.tasks.length===1?'':'s'} · ${capsule.semantic_index.length} exact word entries. Version ${capsule.version.slice(0,12)}.`;
-  for(const event of view.events.filter(e=>capsule.tasks.some(t=>t.id===e.task)||JSON.parse(e.data).case_id===currentCase()))el('events').append(node('li',event.sequence+' · '+event.kind+' · '+event.task));
-  el('receipt').textContent=JSON.stringify(view.receipt,null,2);
+  for(const event of capsule.events)el('events').append(node('li',event.sequence+' · '+event.kind+' · '+event.task));
+  el('receipt').textContent=JSON.stringify(capsule.receipt,null,2);
 }
 el('start').onsubmit=async event=>{event.preventDefault();await perform('create','task_'+crypto.randomUUID().replaceAll('-',''),{query:el('query').value});};
 el('import').onsubmit=async event=>{event.preventDefault();await perform('import',el('docid').value,{title:el('title').value,text:el('text').value});};

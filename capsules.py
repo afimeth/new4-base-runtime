@@ -6,6 +6,10 @@ from runtime import ROOT, digest, now
 
 
 def capsule(runtime,case_id='demo'):
+    with runtime.snapshot():return _capsule(runtime,case_id)
+
+
+def _capsule(runtime,case_id):
     if not re.fullmatch(r'[a-zA-Z0-9_-]{1,64}',case_id):raise ValueError('INVALID_CASE_ID')
     docs=runtime.corpus(case_id)
     view=runtime.view();tasks=[t for t in view['tasks'] if t['case_id']==case_id]
@@ -52,6 +56,10 @@ def capsule(runtime,case_id='demo'):
           'topology':{'nodes':nodes,'edges':edges,'gaps':gaps},'worker_agents':view['workers'],'provider_agents':providers,'lenses':lenses,
           'authority_boundary':'LOCAL_CONTEXT_PROJECTION_NOT_TRUTH_OR_VERIFIED_OWNER_IDENTITY','embedding_model':None,'semantic_confidence':None}
     body['architecture']=json.loads((ROOT/'contracts/room.json').read_text(encoding='utf8'))
+    body['receipt']=view['receipt']
+    body['memory']=[dict(r) for r in runtime.db.execute('SELECT id,revision,source,source_hash,status,role FROM memory WHERE case_id=? ORDER BY id,revision',(case_id,))]
+    task_ids={t['id'] for t in tasks}
+    body['events']=[e for e in view['events'] if e['task'] in task_ids or json.loads(e['data']).get('case_id')==case_id]
     body['context_quality']={'case_sources':len(docs),'explicit_reference_gaps':len(gaps),'prepared_workflows':sum(t['payload'] is not None for t in tasks),'current_source_bound_workflows':sum(t['payload'] is not None and t['payload']['corpus_hash']==digest(docs) for t in tasks),'semantic_relevance':None,'user_utility':None}
     return {**body,'version':digest(body)}
 
