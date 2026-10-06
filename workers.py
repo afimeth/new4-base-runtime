@@ -8,6 +8,7 @@ import threading
 
 ROOT=Path(__file__).resolve().parent
 BUILD_LOCK=threading.Lock()
+CAPACITY=threading.BoundedSemaphore(4)
 TOOLS=('onion.parse','math.sum','graph.route','search.rank')
 
 
@@ -33,9 +34,11 @@ def call(tool,value):
     if len(raw)>65536:raise ValueError('WORKER_INPUT_LIMIT')
     target=binary()
     if not target.exists():raise ValueError('WORKER_NOT_BUILT_RUN_SETUP')
+    if not CAPACITY.acquire(blocking=False):raise ValueError('WORKER_BUSY_RETRY')
     try:process=subprocess.run([str(target)],input=raw,capture_output=True,timeout=3)
     except subprocess.TimeoutExpired as exc:raise ValueError('WORKER_TIMEOUT') from exc
     except OSError as exc:raise ValueError('WORKER_START_FAILED') from exc
+    finally:CAPACITY.release()
     if len(process.stdout)>131072:raise ValueError('WORKER_OUTPUT_LIMIT')
     try:response=json.loads(process.stdout.decode('utf8'))
     except (UnicodeDecodeError,json.JSONDecodeError) as exc:raise ValueError('WORKER_PROTOCOL_MISMATCH') from exc

@@ -84,6 +84,8 @@ The local effect is an artifact row in the **same SQLite transaction** as the te
 
 ## Role relevance
 
+[Design review](docs/DESIGN_REVIEW.md) maps the selected system-design reference to implemented mechanisms and open scaling boundaries.
+
 This is a small demonstration of the product/runtime boundary described in Anthropic's [Product Engineer, Computer Use](https://job-boards.greenhouse.io/anthropic/jobs/5238637008) role: end-to-end delivery, agent harness reliability, tool boundaries, instrumentation, and turning a fuzzy task into a reviewable flow. It is not affiliated with Anthropic and does not demonstrate every qualification in that role. In particular, external-user delivery and production-scale experience remain unproven here.
 
 The earlier public [Agent Runtime Recovery Lab](https://github.com/afimeth/agent-runtime-recovery-lab) documents a dispatch uncertainty window. This fresh implementation explores a different, explicitly narrower effect boundary and adds an integrated user flow, source-bound approvals, actual process-kill tests, and machine-readable claims. No code was copied from private repositories.

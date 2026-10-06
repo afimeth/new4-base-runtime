@@ -8,10 +8,12 @@ import time
 from urllib.parse import urlsplit,parse_qs
 from runtime import Runtime, Rejected, ROOT, encoded
 from workers import ensure_worker
+from qos import TokenBucket
 
 
 def serve(database, port=0):
     token=secrets.token_urlsafe(32)
+    bucket=TokenBucket()
     class Handler(BaseHTTPRequestHandler):
         def log_message(self,*args):
             pass  # Never log session credentials or request bodies.
@@ -61,8 +63,10 @@ def serve(database, port=0):
             origin=f'http://127.0.0.1:{self.server.server_port}'
             if self.headers.get('Origin')!=origin or not secrets.compare_digest(self.headers.get('Authorization',''),f'Bearer {token}'):
                 return self.reply(403,{'error':'LOCAL_SESSION_REQUIRED'})
+            if not bucket.admit():return self.reply(429,{'error':'LOCAL_RATE_LIMIT','retry_after_seconds':1})
             if self.path!='/api/action':return self.reply(404,{'error':'NOT_FOUND'})
             try:
+                self.connection.settimeout(5)
                 length=int(self.headers.get('Content-Length','0'))
                 if not 1<=length<=8192:raise Rejected('BODY_LIMIT')
                 if self.headers.get('Content-Type')!='application/json':raise Rejected('JSON_REQUIRED')
@@ -88,7 +92,7 @@ def serve(database, port=0):
                     else:raise Rejected('UNKNOWN_ACTION')
                     self.reply(200,result)
                 finally:runtime.close()
-            except (Rejected,ValueError,TypeError,KeyError) as exc:
+            except (Rejected,ValueError,TypeError,KeyError,TimeoutError) as exc:
                 self.reply(422,{'error':str(exc) if isinstance(exc,Rejected) else 'INVALID_REQUEST'})
 
     server=ThreadingHTTPServer(('127.0.0.1',port),Handler)

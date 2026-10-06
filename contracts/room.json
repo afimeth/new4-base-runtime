@@ -17,6 +17,6 @@
   "realmdoor": {"role": "One loopback API gateway for this package", "status": "IMPLEMENTED_LOCAL", "not_claimed": "Universal desktop or cross-machine gate"},
   "ikea_scan": {"role": "Observe registered local capabilities and request outcomes", "status": "IMPLEMENTED_ON_DEMAND"},
   "micro_os": {"role": "Application-level process/state/tool coordination metaphor", "status": "NOT_A_BOOTABLE_OS_OR_KERNEL"},
-  "qos": {"worker_timeout_seconds": 3, "worker_input_bytes": 65536, "http_request_bytes": 8192, "cloud_page_bytes": 262144, "production_slo": null},
+  "qos": {"worker_timeout_seconds": 3, "worker_process_slots": 4, "local_gateway_burst": 30, "local_gateway_refill_per_second": 5, "worker_input_bytes": 65536, "http_request_bytes": 8192, "cloud_page_bytes": 262144, "production_slo": null},
   "status": "BASE_RUNTIME_WITH_MEASURED_BOUNDED_BEHAVIOR_NOT_UNIVERSAL_AGENT_SYSTEM"
 }

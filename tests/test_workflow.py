@@ -173,6 +173,21 @@ class WorkflowTests(unittest.TestCase):
         self.rt.create('task','find release checklist','cloud-case')
         self.assertEqual(self.rt.prepare('task')['state'],'AWAITING_APPROVAL')
 
+    def test_qos_token_bucket_burst_and_refill(self):
+        from qos import TokenBucket
+        current=[0.0];bucket=TokenBucket(capacity=2,refill_per_second=1,clock=lambda:current[0])
+        self.assertTrue(bucket.admit());self.assertTrue(bucket.admit());self.assertFalse(bucket.admit())
+        current[0]=1.0;self.assertTrue(bucket.admit());self.assertFalse(bucket.admit())
+
+    def test_worker_capacity_backpressure(self):
+        from workers import CAPACITY,call
+        for _ in range(4):self.assertTrue(CAPACITY.acquire(blocking=False))
+        try:
+            with self.assertRaisesRegex(ValueError,'WORKER_BUSY_RETRY'):call('onion.parse',{'text':'find notes'})
+        finally:
+            for _ in range(4):CAPACITY.release()
+        self.assertEqual(call('onion.parse',{'text':'find notes'})['intent'],'find')
+
     def test_utf8_unicode_roundtrip_without_normalization(self):
         text='Résumé café — 東京 — مرحبا — 🧭 — e\u0301'
         docs=[{'id':'unicode-document','title':'Unicode reference','text':text}]
