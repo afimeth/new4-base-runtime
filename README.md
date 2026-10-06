@@ -88,6 +88,8 @@ The local effect is an artifact row in the **same SQLite transaction** as the te
 
 [Engineering map](docs/ENGINEERING_MAP.md) connects application work, foundations, agent-assisted engineering and product judgment. [Reference ledger](research/references.json) records what was actually read and how it was used.
 
+[Theoretical foundations](docs/THEORETICAL_FOUNDATIONS.md) connects typed representations, code/data boundaries and explicit running-time bounds to the implemented parser, ranker, graph worker and context allocator.
+
 [Design review](docs/DESIGN_REVIEW.md) maps the selected system-design reference to implemented mechanisms and open scaling boundaries.
 
 This is a small demonstration of the product/runtime boundary described in Anthropic's [Product Engineer, Computer Use](https://job-boards.greenhouse.io/anthropic/jobs/5238637008) role: end-to-end delivery, agent harness reliability, tool boundaries, instrumentation, and turning a fuzzy task into a reviewable flow. It is not affiliated with Anthropic and does not demonstrate every qualification in that role. In particular, external-user delivery and production-scale experience remain unproven here.
