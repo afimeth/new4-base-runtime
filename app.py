@@ -60,6 +60,15 @@ def serve(database, port=0):
 
         def do_POST(self):
             if not self.host_ok():return self.reply(403,{'error':'HOST_REJECTED'})
+            # Consume only a bounded body before an early denial. Closing with
+            # unread request bytes can reset the response socket on Windows.
+            try:
+                self.connection.settimeout(5)
+                length=int(self.headers.get('Content-Length','0'))
+                if not 1<=length<=8192:raise ValueError('BODY_LIMIT')
+                body=self.rfile.read(length)
+                if len(body)!=length:raise ValueError('INCOMPLETE_BODY')
+            except (ValueError,TimeoutError):return self.reply(422,{'error':'BODY_LIMIT_OR_INCOMPLETE'})
             origin=f'http://127.0.0.1:{self.server.server_port}'
             if self.headers.get('Origin')!=origin or not secrets.compare_digest(self.headers.get('Authorization',''),f'Bearer {token}'):
                 return self.reply(403,{'error':'LOCAL_SESSION_REQUIRED'})
@@ -70,7 +79,7 @@ def serve(database, port=0):
                 length=int(self.headers.get('Content-Length','0'))
                 if not 1<=length<=8192:raise Rejected('BODY_LIMIT')
                 if self.headers.get('Content-Type')!='application/json':raise Rejected('JSON_REQUIRED')
-                value=json.loads(self.rfile.read(length))
+                value=json.loads(body)
                 if not isinstance(value,dict) or set(value)-{'action','id','query','payload_hash','case_id','title','text','source','rating','term','meaning'}:raise Rejected('INVALID_REQUEST')
                 action=value.get('action');identifier=value.get('id')
                 if not isinstance(identifier,str):raise Rejected('INVALID_TASK_ID')
