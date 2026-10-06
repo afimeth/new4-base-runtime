@@ -1,0 +1,44 @@
+{
+  "schema": "go-evaluation/1",
+  "timestamp": "2026-10-06T21:13:06.855568+00:00",
+  "go_version": "go version go1.27.1 windows/amd64",
+  "status": "PASS",
+  "cases": [
+    {
+      "id": "github.com/afimeth/new4-base-runtime/cmd/worker.TestUnicodeSpans",
+      "status": "PASS",
+      "elapsed_seconds": 0
+    },
+    {
+      "id": "github.com/afimeth/new4-base-runtime/cmd/worker.TestMathExactAndAmbiguity",
+      "status": "PASS",
+      "elapsed_seconds": 0
+    },
+    {
+      "id": "github.com/afimeth/new4-base-runtime/cmd/worker.TestGraphRouteAndDisconnected",
+      "status": "PASS",
+      "elapsed_seconds": 0
+    },
+    {
+      "id": "github.com/afimeth/new4-base-runtime/cmd/worker.TestOnionIntentAndNoAuthority",
+      "status": "PASS",
+      "elapsed_seconds": 0
+    },
+    {
+      "id": "github.com/afimeth/new4-base-runtime/cmd/worker.TestUnknownToolDenied",
+      "status": "PASS",
+      "elapsed_seconds": 0
+    },
+    {
+      "id": "github.com/afimeth/new4-base-runtime/cmd/worker.TestCPURankingAndBoundedFeedback",
+      "status": "PASS",
+      "elapsed_seconds": 0
+    }
+  ],
+  "source_hashes": {
+    "go.mod": "9c7d5cb29f280bd02d01f07c1835ee3dfdd33f3cce2ca37d0e93f09b1e4ab925",
+    "cmd/worker/main.go": "c8318f9f4038558344f723c30c8597a440cd93021d89db9210f65232f1943b8c",
+    "cmd/worker/main_test.go": "b3bc3f7d75ec768c31a05a771b79b96dd4f452e00e131059168ee23d9328263b"
+  },
+  "scope": "Go parser, ranker, math, topology and tool allowlist fixture tests"
+}

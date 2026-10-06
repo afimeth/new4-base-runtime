@@ -1,0 +1,12 @@
+{
+  "schema": "design-references/1",
+  "author": "Arif Anil Dondurmaci",
+  "references": [
+    {"id": "system-design-notes", "url": "https://github.com/liquidslr/system-design-notes", "commit": "9d8388721e7231442763ad37398b8d82224aa68f", "read_scope": ["repository index", "design framework", "rate limiter", "web crawler"], "use": "Review questions and comparison map; no copied code or diagrams", "license_at_inspection": null},
+    {"id": "ai-engineering-from-scratch", "url": "https://aiengineeringfromscratch.com/", "read_scope": ["homepage and four-domain learning-path descriptions"], "use": "Connect application work, software foundations, agent-assisted engineering and product judgment; not a certification or completed course claim"},
+    {"id": "supplied-context-memory-essay", "url": null, "read_scope": "Owner-supplied pasted text", "use": "Separate working context from persistent source memory", "numeric_claims_verified": false, "copied_full_text": false},
+    {"id": "sqlite-atomic-commit", "url": "https://www.sqlite.org/atomiccommit.html", "use": "Storage transaction assumptions"},
+    {"id": "sqlite-wal", "url": "https://www.sqlite.org/wal.html", "use": "Database configuration reference"},
+    {"id": "computer-use-role", "url": "https://job-boards.greenhouse.io/anthropic/jobs/5238637008", "use": "Role relevance only; no affiliation or hiring outcome"}
+  ]
+}
