@@ -1,4 +1,4 @@
-let token;
+let token,refreshVersion=0;
 const el=id=>document.getElementById(id);
 function node(tag,text,cls){const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n;}
 const currentCase=()=>el('case').value;
@@ -9,8 +9,9 @@ async function act(action,id,extra={}){
 async function perform(action,id,extra){try{const value=await act(action,id,extra);el('message').textContent=value.folder?'Exported: '+value.folder:'Saved: '+action;return value;}catch(e){el('message').textContent=e.message;}}
 function button(label,action){const b=node('button',label);b.type='button';b.onclick=action;return b;}
 async function refresh(){
-  const r=await fetch('/api/state');const view=await r.json();if(!r.ok)throw Error(view.error);
-  const c=await fetch('/api/capsule?case='+encodeURIComponent(currentCase()));const capsule=await c.json();if(!c.ok)throw Error(capsule.error);
+  const requestedCase=currentCase(),ticket=++refreshVersion;
+  const c=await fetch('/api/capsule?case='+encodeURIComponent(requestedCase));const capsule=await c.json();if(!c.ok)throw Error(capsule.error);
+  if(ticket!==refreshVersion||requestedCase!==currentCase())return;
   for(const id of ['tasks','events','sources','dictionary'])el(id).replaceChildren();
   for(const task of capsule.tasks){
     const card=node('article','','task');card.append(node('h3',task.query),node('p',task.state,'badge'));
@@ -40,4 +41,4 @@ el('import').onsubmit=async event=>{event.preventDefault();await perform('import
 el('define').onsubmit=async event=>{event.preventDefault();await perform('define','definition',{term:el('term').value,meaning:el('meaning').value});};
 el('export').onclick=()=>perform('export','capsule');el('case').onchange=()=>refresh().catch(e=>el('message').textContent=e.message);
 el('scan').onclick=async()=>{try{const r=await fetch('/api/scan');el('scan-result').textContent=JSON.stringify(await r.json(),null,2);}catch(e){el('message').textContent=e.message;}};
-(async()=>{try{const r=await fetch('/api/session');token=(await r.json()).token;await refresh();}catch(e){el('message').textContent=e.message;}})();
+(async()=>{try{const selected=new URLSearchParams(location.search).get('case');if(selected&&/^[a-zA-Z0-9_-]{1,64}$/.test(selected))el('case').value=selected;const r=await fetch('/api/session');token=(await r.json()).token;await refresh();}catch(e){el('message').textContent=e.message;}})();
