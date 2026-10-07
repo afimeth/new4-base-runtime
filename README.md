@@ -84,6 +84,8 @@ The local effect is an artifact row in the **same SQLite transaction** as the te
 
 ## Role relevance
 
+[Project map](docs/PROJECT_MAP.md) shows the current operational phase, workflow parts, next action, owner calls and receipt-linked changes from the same case snapshot.
+
 [Context and memory](docs/CONTEXT_MEMORY.md) separates a budgeted working slice from source-linked persistent notes, with an on-demand maintenance loop and a Python AST code map.
 
 [Engineering map](docs/ENGINEERING_MAP.md) connects application work, foundations, agent-assisted engineering and product judgment. [Reference ledger](research/references.json) records what was actually read and how it was used.

@@ -221,6 +221,29 @@ class WorkflowTests(unittest.TestCase):
         result=code_map(folder)
         self.assertTrue(any('def work' in s['signature'] for s in result['symbols']))
 
+    def test_project_map_approval_hold_ready_and_source_change(self):
+        from capsules import capsule
+        self.rt.create('waiting','find release policy');self.rt.prepare('waiting')
+        self.ready('ready')
+        self.rt.create('held','zzzzunknown');self.rt.prepare('held')
+        value=capsule(self.rt)['project_map']
+        self.assertEqual(value['next_step']['id'],'ready')
+        self.assertEqual([c['task_id'] for c in value['needs_your_call']],['waiting'])
+        self.assertIsNone(value['completion']['percent'])
+        self.rt.import_document('release-policy','Release policy','New release policy text')
+        value=capsule(self.rt)['project_map']
+        self.assertEqual(next(p['label'] for p in value['parts'] if p['id']=='ready'),'Context changed')
+        self.assertEqual(value['needs_your_call'],[])
+
+    def test_project_map_done_counts_and_receipt_links(self):
+        from capsules import capsule
+        self.ready();self.rt.execute('task')
+        value=capsule(self.rt)['project_map']
+        self.assertEqual(value['current_phase'],'Complete')
+        self.assertEqual(value['completion']['done'],1)
+        self.assertIsNone(value['next_step'])
+        self.assertEqual(value['parts'][0]['receipts'][-1]['kind'],'COMMITTED')
+
     def test_utf8_unicode_roundtrip_without_normalization(self):
         text='Résumé café — 東京 — مرحبا — 🧭 — e\u0301'
         docs=[{'id':'unicode-document','title':'Unicode reference','text':text}]

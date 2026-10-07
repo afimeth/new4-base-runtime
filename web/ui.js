@@ -12,7 +12,16 @@ async function refresh(){
   const requestedCase=currentCase(),ticket=++refreshVersion;
   const c=await fetch('/api/capsule?case='+encodeURIComponent(requestedCase));const capsule=await c.json();if(!c.ok)throw Error(capsule.error);
   if(ticket!==refreshVersion||requestedCase!==currentCase())return;
-  for(const id of ['tasks','events','sources','dictionary'])el(id).replaceChildren();
+  for(const id of ['tasks','events','sources','dictionary','map-milestones','map-parts','map-next','map-calls','map-changes'])el(id).replaceChildren();
+  const map=capsule.project_map;
+  el('map-phase').textContent='You are here · '+map.current_phase;
+  el('map-counts').textContent=`${map.completion.done} of ${map.completion.total} workflows committed · ${map.completion.cancelled} cancelled`;
+  for(const milestone of map.milestones){const m=node('div','','milestone');m.append(node('strong',String(milestone.count)),node('span',milestone.label));el('map-milestones').append(m);}
+  for(const part of map.parts){const card=node('article','','map-part');card.dataset.status=part.label;card.append(node('h3',part.title),node('p',part.label,'badge'));if(part.reason)card.append(node('p',part.reason,'muted'));const last=part.receipts.at(-1);if(last){const link=node('a','Receipt #'+last.sequence);link.href='#receipt-'+last.sequence;card.append(link);}el('map-parts').append(card);}
+  if(map.next_step){const next=map.next_step;el('map-next').append(node('p',next.title),node('p',next.reason,'muted'),button(next.action==='execute'?'Create approved artifact':next.action==='approve'?'Approve exact result':'Find / refresh context',()=>perform(next.action,next.id,{payload_hash:next.payload_hash})));}else el('map-next').append(node('p','No pending action. Start another workflow when needed.','muted'));
+  if(!map.needs_your_call.length)el('map-calls').append(node('p','No approval waiting.','muted'));
+  for(const call of map.needs_your_call)el('map-calls').append(node('p',call.title),node('p','Your explicit approval is required. No timeout grants it.','muted'));
+  for(const change of map.recent_changes){const link=node('a','#'+change.sequence+' · '+change.kind+' · '+change.timestamp);link.href='#receipt-'+change.sequence;el('map-changes').append(link,node('br',''));}
   for(const task of capsule.tasks){
     const card=node('article','','task');card.append(node('h3',task.query),node('p',task.state,'badge'));
     if(task.payload){
@@ -33,7 +42,7 @@ async function refresh(){
   el('graph').textContent=JSON.stringify({nodes:capsule.topology.nodes.length,links:capsule.topology.edges.length,word_entries:capsule.semantic_index.length,relations:capsule.topology.edges.filter(e=>e.relation!=='CONTAINS_EXACT_WORD').map(e=>({from:labels[e.from],relation:e.relation,to:labels[e.to]})),gaps:capsule.topology.gaps},null,2);
   el('lenses').textContent=JSON.stringify({architecture:capsule.architecture,context_quality:capsule.context_quality,workers:capsule.worker_agents,providers:capsule.provider_agents,lenses:capsule.lenses},null,2);
   el('capsule-summary').textContent=`${capsule.sources.length} source${capsule.sources.length===1?'':'s'} · ${capsule.tasks.length} workflow${capsule.tasks.length===1?'':'s'} · ${capsule.semantic_index.length} exact word entries. Version ${capsule.version.slice(0,12)}.`;
-  for(const event of capsule.events)el('events').append(node('li',event.sequence+' · '+event.kind+' · '+event.task));
+  for(const event of capsule.events){const item=node('li',event.sequence+' · '+event.kind+' · '+event.task);item.id='receipt-'+event.sequence;const proof=node('details','');proof.append(node('summary','Receipt evidence'),node('pre',JSON.stringify({hash:event.hash,previous:event.previous,timestamp:event.timestamp,data:JSON.parse(event.data)},null,2)));item.append(proof);el('events').append(item);}
   el('receipt').textContent=JSON.stringify(capsule.receipt,null,2);
 }
 el('start').onsubmit=async event=>{event.preventDefault();await perform('create','task_'+crypto.randomUUID().replaceAll('-',''),{query:el('query').value});};

@@ -60,6 +60,8 @@ def _capsule(runtime,case_id):
     body['memory']=[dict(r) for r in runtime.db.execute('SELECT id,revision,source,source_hash,status,role FROM memory WHERE case_id=? ORDER BY id,revision',(case_id,))]
     task_ids={t['id'] for t in tasks}
     body['events']=[e for e in view['events'] if e['task'] in task_ids or json.loads(e['data']).get('case_id')==case_id]
+    from project_map import project_map
+    body['project_map']=project_map(tasks,body['events'],docs,runtime.definition_version(case_id))
     body['context_quality']={'case_sources':len(docs),'explicit_reference_gaps':len(gaps),'prepared_workflows':sum(t['payload'] is not None for t in tasks),'current_source_bound_workflows':sum(t['payload'] is not None and t['payload']['corpus_hash']==digest(docs) for t in tasks),'semantic_relevance':None,'user_utility':None}
     return {**body,'version':digest(body)}
 
