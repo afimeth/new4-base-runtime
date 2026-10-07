@@ -18,12 +18,12 @@ async function refresh(){
   el('map-counts').textContent=`${map.completion.done} of ${map.completion.total} workflows committed · ${map.completion.cancelled} cancelled`;
   for(const milestone of map.milestones){const m=node('div','','milestone');m.append(node('strong',String(milestone.count)),node('span',milestone.label));el('map-milestones').append(m);}
   for(const part of map.parts){const card=node('article','','map-part');card.dataset.status=part.label;card.append(node('h3',part.title),node('p',part.label,'badge'));if(part.reason)card.append(node('p',part.reason,'muted'));const last=part.receipts.at(-1);if(last){const link=node('a','Receipt #'+last.sequence);link.href='#receipt-'+last.sequence;card.append(link);}el('map-parts').append(card);}
-  if(map.next_step){const next=map.next_step;el('map-next').append(node('p',next.title),node('p',next.reason,'muted'),button(next.action==='execute'?'Create approved artifact':next.action==='approve'?'Approve exact result':'Find / refresh context',()=>perform(next.action,next.id,{payload_hash:next.payload_hash})));}else el('map-next').append(node('p','No pending action. Start another workflow when needed.','muted'));
+  if(map.next_step){const next=map.next_step;el('map-next').append(node('p',next.title),node('p',next.reason,'muted'));if(next.action==='approve'){const review=node('a','Review exact result');review.href='#workflow-'+next.id;el('map-next').append(review);}else el('map-next').append(button(next.action==='execute'?'Create approved artifact':'Find / refresh context',()=>perform(next.action,next.id,{payload_hash:next.payload_hash})));}else el('map-next').append(node('p','No pending action. Start another workflow when needed.','muted'));
   if(!map.needs_your_call.length)el('map-calls').append(node('p','No approval waiting.','muted'));
   for(const call of map.needs_your_call)el('map-calls').append(node('p',call.title),node('p','Your explicit approval is required. No timeout grants it.','muted'));
   for(const change of map.recent_changes){const link=node('a','#'+change.sequence+' · '+change.kind+' · '+change.timestamp);link.href='#receipt-'+change.sequence;el('map-changes').append(link,node('br',''));}
   for(const task of capsule.tasks){
-    const card=node('article','','task');card.append(node('h3',task.query),node('p',task.state,'badge'));
+    const card=node('article','','task');card.id='workflow-'+task.id;card.append(node('h3',task.query),node('p',task.state,'badge'));
     if(task.payload){
       card.append(node('pre',task.payload.hold_reason||task.payload.draft||'No matching source. Add a note or refine the request.'));
       for(const source of task.payload.sources){const line=node('div','','row');line.append(node('p',source.id+' · '+source.hash.slice(0,16),'muted'),button('Helpful',()=>perform('feedback',task.id,{source:source.id,rating:1})),button('Not helpful',()=>perform('feedback',task.id,{source:source.id,rating:-1})));card.append(line);}
