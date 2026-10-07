@@ -1,24 +1,25 @@
 {
   "schema": "evaluation/1",
-  "timestamp": "2026-10-06T21:17:47.426179+00:00",
+  "timestamp": "2026-10-07T08:16:21.290644+00:00",
   "environment": {
     "os": "Windows",
     "python": "3.14.7",
     "sqlite": "3.50.4"
   },
-  "source_commit_at_run": "e121eaa9b515fb2ca13f51d40a1d0abea80d42a6",
+  "source_commit_at_run": "45467204e4edefa754aee613aa6692e3048aee95",
   "source_hashes": {
     "runtime.py": "851a3d3fe2f660a29e4272c6e32812eb6fd02382bae214917af59a5a5dafa0b4",
     "app.py": "ba3c5cc049612614ba597892e3169e9134b0906486c53f11c3be2220699a1289",
-    "evaluate.py": "a069d4b75c21f4d6f02e911dd2dd3d9f8cac1378fee70bc617f92e4b8d9d29dd",
-    "tests/test_workflow.py": "7e5f757eb0aa87464867786281dd8fc82aa2e3b8877a58fc13436fcb68713bb2",
+    "evaluate.py": "db3743992b3a460450adfca687ba1edbd53bfdf64ce52efb74a9f035dd069434",
+    "tests/test_workflow.py": "d7c12a46e29702489013fd44681cd50c5c36d16102679b305a480185621823da",
     "fixtures/documents.json": "ec282ae548f8f731a1873227255c83fda512de74dbe459f3b894eda822409b34",
-    "web/index.html": "86882d6a530e32df936e81e2000ffb52ea4247b837d24bcc71e4f96ac3640a1a",
-    "web/ui.js": "e4954a71f3c57ad554be0303f98ddbdae255711a241dfd46bcae6e13b38522a3",
-    "web/style.css": "76590e6140bcd1529f5b0ba6a75b25a9c1de65d4fa4f1c9336718f4501044883",
+    "web/index.html": "c1fbbc7390e26af1ae95fa9b12627a035a893ceb580c46782fd7f6691f81fad2",
+    "web/ui.js": "f1f3414382d9a5b8e6c30fdbb40efb94996219803d425c721e09d8e33793ca3a",
+    "web/style.css": "b08b9e04039ac0db2ac1625d3a0fbdb9a7dc954f27bc787936b5a29f26083328",
     "workers.py": "135bdb38373744dbc5f045a916078be602e0ff25e9c66ebd5c34912d1e2ea845",
     "feeds.py": "a87a6043f65588375f679d9cdbe5503b43ad903c896ca6ecdfa61b4462ff7a02",
-    "capsules.py": "3bfc0ec8b5cd743d887cf0daab1739c519e8c21278984987f55fe72a96202f10",
+    "capsules.py": "8e86050ad0a6979faffa2f075336e814f475786b3316ce5c53952793be640826",
+    "project_map.py": "0caa08182e4cc0c37c38d748c84bf9792f3066a238e830260c14afde0dd505ca",
     "context.py": "853fb8e647894a01a73a4c481054e638e0b7ec8b486ddfd3d1ae71aee3ed6866",
     "scan.py": "ee6f663e0b6109ce57c946705a26e1310d1e973115f116e8ffbec5913dc6f169",
     "qos.py": "81e1b2055d04d0a6555ce70783e8bee0155c931185b86be93c2f35f1e0ca8e63",
@@ -48,199 +49,211 @@
     {
       "id": "test_workflow.WorkflowTests.test_approval_denial_and_positive_control",
       "status": "PASS",
-      "elapsed_ms": 790.2477,
+      "elapsed_ms": 101.2173,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_artifact_tamper_detected_on_replay",
       "status": "PASS",
-      "elapsed_ms": 80.0471,
+      "elapsed_ms": 80.3887,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_cancellation_survives_restart",
       "status": "PASS",
-      "elapsed_ms": 83.4782,
+      "elapsed_ms": 86.2872,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_capsule_topology_dictionary_and_projection",
       "status": "PASS",
-      "elapsed_ms": 53.1504,
+      "elapsed_ms": 52.5637,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_case_isolation_and_source_spelling",
       "status": "PASS",
-      "elapsed_ms": 109.4458,
+      "elapsed_ms": 106.2872,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_cloud_feed_destination_boundary",
       "status": "PASS",
-      "elapsed_ms": 55.2645,
+      "elapsed_ms": 69.1547,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_cloud_spider_then_case_hydration",
       "status": "PASS",
-      "elapsed_ms": 121.4855,
+      "elapsed_ms": 133.8457,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_concurrent_workers_commit_one_artifact",
       "status": "PASS",
-      "elapsed_ms": 375.0836,
+      "elapsed_ms": 430.5371,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_context_prefix_budget_and_memory_supersession",
       "status": "PASS",
-      "elapsed_ms": 99.8064,
+      "elapsed_ms": 101.8882,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_cpu_reranker_feedback_is_case_query_and_source_scoped",
       "status": "PASS",
-      "elapsed_ms": 133.3323,
+      "elapsed_ms": 136.4549,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_duplicate_request_conflict_and_replay",
       "status": "PASS",
-      "elapsed_ms": 79.1918,
+      "elapsed_ms": 79.274,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_end_to_end_source_bound_artifact",
       "status": "PASS",
-      "elapsed_ms": 80.4234,
+      "elapsed_ms": 82.4816,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_http_origin_token_boundary_and_ui_action",
       "status": "PASS",
-      "elapsed_ms": 669.2428,
+      "elapsed_ms": 665.8314,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_hydrate_no_network_and_explicit_frame",
       "status": "PASS",
-      "elapsed_ms": 75.9891,
+      "elapsed_ms": 71.2538,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_invalid_inputs_and_duplicate_sources",
       "status": "PASS",
-      "elapsed_ms": 42.5729,
+      "elapsed_ms": 48.5671,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_local_feed_then_hydration",
       "status": "PASS",
-      "elapsed_ms": 76.3363,
+      "elapsed_ms": 106.6092,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_no_context_abstains",
       "status": "PASS",
-      "elapsed_ms": 69.7509,
+      "elapsed_ms": 73.5433,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_payload_and_tool_tamper_denied",
       "status": "PASS",
-      "elapsed_ms": 76.6302,
+      "elapsed_ms": 79.4119,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_process_kill_after_commit_replays_without_duplicate",
       "status": "PASS",
-      "elapsed_ms": 255.3684,
+      "elapsed_ms": 351.6189,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_process_kill_before_commit_rolls_back",
       "status": "PASS",
-      "elapsed_ms": 267.0417,
+      "elapsed_ms": 267.7789,
+      "detail": null
+    },
+    {
+      "id": "test_workflow.WorkflowTests.test_project_map_approval_hold_ready_and_source_change",
+      "status": "PASS",
+      "elapsed_ms": 147.0944,
+      "detail": null
+    },
+    {
+      "id": "test_workflow.WorkflowTests.test_project_map_done_counts_and_receipt_links",
+      "status": "PASS",
+      "elapsed_ms": 83.9564,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_python_ast_map_does_not_execute_source",
       "status": "PASS",
-      "elapsed_ms": 48.4613,
+      "elapsed_ms": 52.6789,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_qos_token_bucket_burst_and_refill",
       "status": "PASS",
-      "elapsed_ms": 42.0099,
+      "elapsed_ms": 43.4892,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_real_go_math_frame_and_decimal_precision",
       "status": "PASS",
-      "elapsed_ms": 99.4986,
+      "elapsed_ms": 95.2922,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_real_go_topology_frame_from_explicit_links",
       "status": "PASS",
-      "elapsed_ms": 100.8279,
+      "elapsed_ms": 97.4382,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_receipt_tamper_detected",
       "status": "PASS",
-      "elapsed_ms": 82.6521,
+      "elapsed_ms": 79.0796,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_scoped_dictionary_routes_and_revision_revokes_approval",
       "status": "PASS",
-      "elapsed_ms": 83.356,
+      "elapsed_ms": 83.5303,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_source_change_invalidates_old_approval",
       "status": "PASS",
-      "elapsed_ms": 108.4135,
+      "elapsed_ms": 114.6165,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_stateless_worker_has_no_cross_call_context",
       "status": "PASS",
-      "elapsed_ms": 80.9755,
+      "elapsed_ms": 81.8549,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_untrusted_source_is_not_authority",
       "status": "PASS",
-      "elapsed_ms": 75.9647,
+      "elapsed_ms": 74.8362,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_utf8_unicode_roundtrip_without_normalization",
       "status": "PASS",
-      "elapsed_ms": 82.5684,
+      "elapsed_ms": 87.5645,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_view_reads_one_snapshot_during_concurrent_write",
       "status": "PASS",
-      "elapsed_ms": 66.1143,
+      "elapsed_ms": 65.8239,
       "detail": null
     },
     {
       "id": "test_workflow.WorkflowTests.test_worker_capacity_backpressure",
       "status": "PASS",
-      "elapsed_ms": 53.8905,
+      "elapsed_ms": 60.7807,
       "detail": null
     }
   ],
-  "passed": 32,
-  "total": 32,
+  "passed": 34,
+  "total": 34,
   "status": "PASS",
   "process_kill": "OS_PROCESS_TERMINATION_NOT_POWER_FAILURE",
-  "receipt_hash": "2cd8a68e22f4205a7d2a9e56090ef26d3f6aad221fbee805e5ce91fb0ff23b5f"
+  "receipt_hash": "6550da1bab592d07f03ee361807d89338c59d6643b5bc867b72072a82151d3d2"
 }
