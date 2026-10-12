@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuthnRequest xmlns="urn:oasis:names:tc:SAML:2.0:protocol" ID="_0123456789abcdef0123456789abcdef" Version="2.0" IssueInstant="2026-10-12T09:00:00Z" Destination="https://idp.example.invalid/saml/sso" AssertionConsumerServiceURL="https://sp.example.invalid/saml/acs" ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST">
+  <Issuer xmlns="urn:oasis:names:tc:SAML:2.0:assertion">https://sp.example.invalid/new4</Issuer>
+  <NameIDPolicy xmlns="urn:oasis:names:tc:SAML:2.0:protocol" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" AllowCreate="true"></NameIDPolicy>
+</AuthnRequest>

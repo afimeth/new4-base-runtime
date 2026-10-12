@@ -1,0 +1,12 @@
+# Illustrative projection of frame.json; the Go example only parses JSON.
+schema = "new4.identity.saml-frame/1"
+protocol = "SAML-2.0"
+name_id_format = "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
+authority = "NONE_UNVERIFIED_DEMO"
+
+[sp]
+entity_id = "https://sp.example.invalid/new4"
+acs_url = "https://sp.example.invalid/saml/acs"
+
+[idp]
+sso_url = "https://idp.example.invalid/saml/sso"

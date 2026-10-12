@@ -33,6 +33,10 @@ python app.py scan
 
 Set the local corpus URL to your own compatible service; `8080` is an example. The adapter consumes `/api/fastwikitaxi` with a bounded query. Local folders accept selected UTF-8 `.txt`/`.md` files. Cloud crawl respects robots, same-origin boundaries, budgets and sensitive-content holds, retaining up to 120 words/page. No background crawl or private GitHub credentials.
 
+## Identity protocol example (separate from runtime authority)
+
+[SAML 2.0 / Go executable frame](examples/saml-frame/README.md) demonstrates unsigned SP-initiated AuthnRequest XML and Redirect encoding, with JSON configuration and documentation-only YAML/TOML projections. It does not implement enterprise SSO, parse assertions or grant New4 owner authority. Test with `go test ./examples/saml-frame`.
+
 ## Worker, zone and frame
 
 | Role | Zone | Implemented work |
