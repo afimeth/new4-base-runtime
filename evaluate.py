@@ -11,7 +11,7 @@ from runtime import ROOT, digest
 
 
 def source_hashes():
-    paths=['runtime.py','app.py','evaluate.py','tests/test_workflow.py','fixtures/documents.json','web/index.html','web/ui.js','web/style.css',
+    paths=['runtime.py','app.py','evaluate.py','tests/test_workflow.py','tests/test_audit_regressions.py','fixtures/documents.json','web/index.html','web/ui.js','web/style.css',
            'workers.py','feeds.py','capsules.py','project_map.py','context.py','scan.py','qos.py','go.mod','cmd/worker/main.go','cmd/worker/main_test.go',
            'scripts/project.py','scripts/check_public.py','contracts/dictionary.json','contracts/design.json','contracts/claims.json','contracts/hypotheses.json',
            'contracts/room.json','scripts/build_linux.py','scripts/go_evaluate.py','schemas/evaluation.schema.json','.github/workflows/evidence.yml']

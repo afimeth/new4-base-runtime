@@ -176,7 +176,7 @@ class Runtime:
                 return self.task(identifier)
             self.db.execute("DELETE FROM approvals WHERE task=?", (identifier,))
             self.db.execute("UPDATE tasks SET state=?,payload=?,payload_hash=?,corpus_hash=? WHERE id=?", (state, encoded(payload),h,generation,identifier))
-            self.event(identifier, "PREPARED" if selected else "ABSTAINED", {"payload_hash":h,"source_ids":[d['id'] for d in selected],"planner":payload['planner']})
+            self.event(identifier, "PREPARED" if state == "AWAITING_APPROVAL" else "ABSTAINED", {"payload_hash":h,"source_ids":[d['id'] for d in selected],"planner":payload['planner']})
         return self.task(identifier)
 
     def approve(self, identifier, payload_hash, operator='local-operator'):
@@ -206,7 +206,8 @@ class Runtime:
         return self.task(identifier)
 
     def execute(self, identifier, documents=None, fault=None):
-        docs=self.corpus(self.task(identifier)['case_id']) if documents is None else documents
+        # Read the live source generation under the same writer lock as the effect.
+        # An explicit documents argument remains a trusted fixture override.
         with self.transaction():
             task=self.task(identifier)
             if task['state']=='DONE':
@@ -219,6 +220,7 @@ class Runtime:
             payload=json.loads(task['payload'])
             if digest(payload)!=task['payload_hash'] or payload['policy_hash']!=digest(POLICY) or payload['tool']!=POLICY['allowed_tool']:
                 raise Rejected('PAYLOAD_OR_POLICY_CHANGED')
+            docs=self.corpus(task['case_id']) if documents is None else documents
             if digest(docs)!=task['corpus_hash']:
                 raise Rejected('SOURCE_CHANGED_REPREPARE_REQUIRED')
             if payload.get('dictionary_hash')!=self.definition_version(task['case_id']):

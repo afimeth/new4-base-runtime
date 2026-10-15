@@ -118,7 +118,13 @@ func money(text string) (any, error) {
 	if strings.Contains(text, "-") {
 		return nil, fmt.Errorf("NEGATIVE_AMOUNT_UNSUPPORTED")
 	}
-	matches := regexp.MustCompile(`\b[0-9]+(?:\.[0-9]+)?\b`).FindAllString(text, -1)
+	// Accept only the documented addition grammar, not numbers extracted from
+	// an arbitrary expression. Unsupported operators must never become sums.
+	grammar := regexp.MustCompile(`(?i)^\s*(?:(?:calculate|sum|total)\s+)?[0-9]+(?:\.[0-9]+)?(?:\s*\+\s*[0-9]+(?:\.[0-9]+)?)*\s+(?:USD|EUR)\s*$`)
+	if !grammar.MatchString(text) {
+		return nil, fmt.Errorf("UNSUPPORTED_EXPRESSION_USE_ADDITION")
+	}
+	matches := regexp.MustCompile(`[0-9]+(?:\.[0-9]+)?`).FindAllString(text, -1)
 	if len(matches) == 0 || len(matches) > 100 {
 		return nil, fmt.Errorf("AMOUNT_COUNT_LIMIT")
 	}

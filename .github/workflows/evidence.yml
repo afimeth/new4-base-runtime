@@ -14,6 +14,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
@@ -27,9 +29,16 @@ jobs:
         run: python scripts/check_public.py
       - name: Execute fixture scenarios
         run: python app.py evaluate --output evidence/ci-eval.json
-      - name: Verify and project source-bound results
+      - name: Verify and project current source-bound results
         run: python scripts/project.py --report evidence/ci-eval.json --output evidence/ci-evidence.md
-      - name: Verify committed local report binding
+      - name: Checkout the historical baseline source separately
+        uses: actions/checkout@v4
+        with:
+          ref: 55ee9478248c8c9ca205c6938521d11b53c9e9b0
+          path: .baseline
+          persist-credentials: false
+      - name: Verify historical report against its historical source
+        working-directory: .baseline
         run: python scripts/project.py --verify-only
       - uses: actions/upload-artifact@v4
         if: always()
